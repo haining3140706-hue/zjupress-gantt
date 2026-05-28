@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>浙大出版社数智出版一体化平台 · 项目甘特图</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    background: #f0f2f7;
+    padding: 20px;
+    color: #1f2937;
+  }
+  .container {
+    max-width: 2000px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+    overflow: hidden;
+  }
+  .header {
+    background: linear-gradient(135deg, #003f7f 0%, #0066b3 50%, #0091d5 100%);
+    color: #fff;
+    padding: 24px 32px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+  }
+  .header .subtitle {
+    font-size: 13.5px;
+    opacity: 0.93;
+    line-height: 1.6;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 14px 32px;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 12.5px;
+    color: #4b5563;
+    align-items: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .legend-color {
+    width: 22px; height: 14px; border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .legend-diamond {
+    width: 12px; height: 12px;
+    transform: rotate(45deg);
+    background: #dc2626;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .scroll-wrapper {
+    overflow-x: auto;
+    padding: 0 0 12px;
+  }
+  table.gantt {
+    width: 100%;
+    min-width: 1900px;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    table-layout: fixed;
+  }
+  table.gantt th, table.gantt td {
+    border-bottom: 1px solid #eef0f4;
+    padding: 0;
+    vertical-align: middle;
+  }
+  .col-task {
+    width: 420px;
+    min-width: 420px;
+    padding: 11px 16px !important;
+    text-align: left;
+    border-right: 1px solid #e5e7eb;
+  }
+  .col-owner {
+    width: 72px;
+    min-width: 72px;
+    text-align: center;
+    padding: 11px 4px !important;
+    color: #6b7280;
+    font-size: 12px;
+    border-right: 1px solid #e5e7eb;
+  }
+  .col-month {
+    width: 82px;
+    min-width: 82px;
+    text-align: center;
+  }
+  thead .quarter-row th {
+    background: #e8eef7;
+    color: #003f7f;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 10px 4px !important;
+    border-bottom: 1px solid #c7d4ea;
+    border-right: 1px solid #d0dcef;
+  }
+  thead .month-row th {
+    background: #f3f4f6;
+    color: #374151;
+    font-weight: 600;
+    padding: 9px 4px !important;
+    border-bottom: 2px solid #d1d5db;
+    font-size: 12px;
+  }
+  .phase-row td {
+    background: linear-gradient(90deg, #fff7ed 0%, #fef3c7 60%, #fef9e7 100%);
+    font-weight: 700;
+    color: #92400e;
+    padding: 12px 16px !important;
+    font-size: 13px;
+    border-top: 2px solid #fcd34d;
+    border-bottom: 2px solid #fcd34d;
+    line-height: 1.55;
+  }
+  .task-name {
+    color: #1f2937;
+    line-height: 1.5;
+    word-break: keep-all;
+    white-space: normal;
+  }
+  .task-name.sub {
+    padding-left: 16px;
+    color: #374151;
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+  .task-name.deeper {
+    padding-left: 30px;
+    color: #4b5563;
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .task-name.deliv {
+    padding-left: 16px;
+    color: #047857;
+    font-style: italic;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .task-name.milestone {
+    padding-left: 16px;
+    color: #b91c1c;
+    font-weight: 700;
+    font-size: 12.5px;
+  }
+  .bar-cell {
+    position: relative;
+    height: 42px;
+    background: #fafbfc;
+  }
+  .bar-cell.alt { background: #f3f4f6; }
+  .bar {
+    position: absolute;
+    top: 10px;
+    height: 22px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 8px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: visible;
+    letter-spacing: 0.2px;
+    z-index: 2;
+  }
+  .bar-label {
+    position: absolute;
+    top: 10px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    padding: 0 6px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .bar.p1 { background: linear-gradient(90deg, #1d4ed8, #3b82f6); }
+  .bar.p2 { background: linear-gradient(90deg, #047857, #10b981); }
+  .bar.p3 { background: linear-gradient(90deg, #b45309, #f59e0b); }
+  .bar.deliv {
+    background: repeating-linear-gradient(45deg, #10b981, #10b981 6px, #34d399 6px, #34d399 12px);
+    height: 12px;
+    top: 15px;
+    border-radius: 3px;
+  }
+  .bar.milestone {
+    width: 20px !important;
+    height: 20px !important;
+    background: #dc2626 !important;
+    transform: rotate(45deg) !important;
+    border-radius: 3px !important;
+    box-shadow: 0 0 0 2px #fff, 0 2px 8px rgba(220,38,38,0.45) !important;
+    padding: 0 !important;
+    top: 11px !important;
+  }
+  tbody tr:hover .bar-cell { background: #eef3ff; }
+  tbody tr:hover .bar-cell.alt { background: #e8f0fd; }
+  .footer {
+    padding: 18px 32px;
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+    font-size: 12.5px;
+    color: #6b7280;
+    line-height: 2;
+  }
+  .footer strong { color: #1f2937; }
+  .footer .milestone-mark {
+    display: inline-block;
+    width: 10px; height: 10px;
+    background: #dc2626;
+    transform: rotate(45deg);
+    margin: 0 6px 0 10px;
+    vertical-align: middle;
+  }
+  .q-border { border-right: 2px solid #c7d4ea !important; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>浙江大学出版社数智出版一体化平台 · 项目实施甘特图</h1>
+    <div class="subtitle">建设周期：2026年6月 — 2027年12月（共18个月）&nbsp;&nbsp;·&nbsp;&nbsp;"打基础 → 进流程 → 规模化"三阶段递进推进</div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-color" style="background: linear-gradient(90deg,#1d4ed8,#3b82f6);"></div>第一阶段 · 前期调研与基础建设</div>
+    <div class="legend-item"><div class="legend-color" style="background: linear-gradient(90deg,#047857,#10b981);"></div>第二阶段 · 模型深化与业务落地</div>
+    <div class="legend-item"><div class="legend-color" style="background: linear-gradient(90deg,#b45309,#f59e0b);"></div>第三阶段 · 规模化应用与持续运营</div>
+    <div class="legend-item"><div class="legend-color" style="background: repeating-linear-gradient(45deg,#10b981,#10b981 4px,#34d399 4px,#34d399 8px);"></div>阶段成果交付</div>
+    <div class="legend-item"><div class="legend-diamond"></div>关键里程碑</div>
+  </div>
+
+  <div class="scroll-wrapper">
+    <table class="gantt">
+      <thead>
+        <tr class="quarter-row">
+          <th rowspan="2" class="col-task">任务 / 工作包</th>
+          <th rowspan="2" class="col-owner">责任方</th>
+          <th colspan="3" class="q-border">2026 Q3</th>
+          <th colspan="3" class="q-border">2026 Q4</th>
+          <th colspan="3" class="q-border">2027 Q1</th>
+          <th colspan="3" class="q-border">2027 Q2</th>
+          <th colspan="3" class="q-border">2027 Q3</th>
+          <th colspan="3" class="q-border">2027 Q4</th>
+        </tr>
+        <tr class="month-row">
+          <th class="col-month">6月</th><th class="col-month">7月</th><th class="col-month q-border">8月</th>
+          <th class="col-month">9月</th><th class="col-month">10月</th><th class="col-month q-border">11月</th>
+          <th class="col-month">12月</th><th class="col-month">1月</th><th class="col-month q-border">2月</th>
+          <th class="col-month">3月</th><th class="col-month">4月</th><th class="col-month q-border">5月</th>
+          <th class="col-month">6月</th><th class="col-month">7月</th><th class="col-month q-border">8月</th>
+          <th class="col-month">9月</th><th class="col-month">10月</th><th class="col-month q-border">11月</th>
+        </tr>
+      </thead>
+      <tbody id="gantt-body"></tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <div><strong>关键里程碑：</strong>
+      <span class="milestone-mark"></span>M1 调研报告与实施方案评审通过（2026.08）
+      <span class="milestone-mark"></span>M2 数智基座一期上线（2026.12）
+      <span class="milestone-mark"></span>M3 核心智能体业务集成完成（2027.06）
+      <span class="milestone-mark"></span>M4 平台规模化运营与整体验收（2027.12）
+    </div>
+    <div><strong>责任方说明：</strong>甲方 = 浙江大学出版社业务部门；乙方 = 数传集团实施团队；联合 = 甲乙双方协同推进</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const totalMonths = 18;
+  const monthCellWidth = 82;
+
+  const rows = [
+    // ============ 第一阶段 ============
+    { phase: '第一阶段：前期调研与基础建设阶段（2026年6月 — 2026年12月）· "打基础、定方案、建底座、做试点"', isPhase: true },
+    { name: '1. 开展全社业务调研', owner: '联合', phase: 'p1', start: 0, span: 2, label: '调研报告' },
+    { name: '2. 技术选型与方案细化', owner: '乙方', phase: 'p1', start: 1, span: 2, label: '实施方案' },
+    { name: 'M1 · 方案评审通过', owner: '联合', phase: 'p1', start: 2, span: 1, isMilestone: true },
+    { name: '3. 基础设施与数智基座建设', owner: '乙方', phase: 'p1', start: 1, span: 4, label: '算力·存储·网络·安全' },
+    { name: '统一身份认证体系搭建', owner: '乙方', phase: 'p1', start: 2, span: 3, deeper: true, label: '身份认证' },
+    { name: '数据中台与数据交换中台', owner: '乙方', phase: 'p1', start: 3, span: 3, deeper: true, label: '数据中台' },
+    { name: '4. 通用大模型本地化部署', owner: '乙方', phase: 'p1', start: 3, span: 3, label: 'DeepSeek + BooksGPT' },
+    { name: '5. 知识库与语料库建设', owner: '联合', phase: 'p1', start: 2, span: 4, label: '6类知识库初版' },
+    { name: '6. 首批智能体设计与测试', owner: '乙方', phase: 'p1', start: 4, span: 2, label: '选题/审校/营销' },
+    { name: '7. 系统对接与供应链需求梳理', owner: '联合', phase: 'p1', start: 3, span: 3, label: '系统对接梳理' },
+    { name: '阶段成果交付（一期）', owner: '联合', phase: 'p1', start: 5, span: 2, isDeliv: true },
+    { name: 'M2 · 数智基座一期上线', owner: '联合', phase: 'p1', start: 6, span: 1, isMilestone: true },
+
+    // ============ 第二阶段 ============
+    { phase: '第二阶段：模型深化与业务落地阶段（2027年1月 — 2027年6月）· "强能力、做集成、进流程、促应用"', isPhase: true },
+    { name: '1. 深化知识库与语料库建设', owner: '联合', phase: 'p2', start: 7, span: 5, label: '标签·版本·权限·更新' },
+    { name: '2. 垂类模型训练与优化', owner: '乙方', phase: 'p2', start: 7, span: 5, label: '"启真知擎"持续微调' },
+    { name: '3. 核心智能体开发与优化', owner: '乙方', phase: 'p2', start: 7, span: 5, label: '编·印·发·管全流程' },
+    { name: 'AI选题 + AI内容创作助手', owner: '乙方', phase: 'p2', start: 7, span: 4, deeper: true, label: 'AI选题·创作' },
+    { name: 'AI翻译 + AI审校助手', owner: '乙方', phase: 'p2', start: 7, span: 4, deeper: true, label: 'AI翻译·审校' },
+    { name: 'AI多媒体 + 馆配销售支持', owner: '乙方', phase: 'p2', start: 8, span: 4, deeper: true, label: 'AI多媒体·馆配' },
+    { name: '新媒体运营 + 精准营销', owner: '乙方', phase: 'p2', start: 9, span: 3, deeper: true, label: '新媒体·精准营销' },
+    { name: '4. 业务系统集成对接', owner: '联合', phase: 'p2', start: 8, span: 4, label: 'ERP·OA·合同·电子书' },
+    { name: '5. 供应链数字化基础管控', owner: '联合', phase: 'p2', start: 8, span: 4, label: '供应链数字化' },
+    { name: '6. 培训推广与效果评估', owner: '联合', phase: 'p2', start: 10, span: 2, label: '分层培训' },
+    { name: '阶段成果交付（二期）', owner: '联合', phase: 'p2', start: 11, span: 2, isDeliv: true },
+    { name: 'M3 · 核心智能体业务集成完成', owner: '联合', phase: 'p2', start: 12, span: 1, isMilestone: true },
+
+    // ============ 第三阶段 ============
+    { phase: '第三阶段：规模化应用与持续运营阶段（2027年7月 — 2027年12月）· "规模应用、运营管理、持续优化、价值评估"', isPhase: true },
+    { name: '1. 数智化体系系统管理机制', owner: '乙方', phase: 'p3', start: 13, span: 5, label: '运维·监控·安全审计' },
+    { name: '2. 智能体规模化应用推广', owner: '联合', phase: 'p3', start: 13, span: 5, label: '全社业务部门覆盖' },
+    { name: '3. 模型与业务适配持续优化', owner: '乙方', phase: 'p3', start: 13, span: 5, label: '模型持续迭代优化' },
+    { name: '4. 常态化效果评估体系', owner: '联合', phase: 'p3', start: 14, span: 4, label: '效率·质量·满意度' },
+    { name: '5. 供应链数字化全面落地', owner: '联合', phase: 'p3', start: 13, span: 4, label: '供应链全面数字化' },
+    { name: '6. 长期演进机制建立', owner: '联合', phase: 'p3', start: 15, span: 3, label: '深化建设规划' },
+    { name: '阶段成果交付（三期）', owner: '联合', phase: 'p3', start: 16, span: 2, isDeliv: true },
+    { name: 'M4 · 平台规模化运营与整体验收', owner: '联合', phase: 'p3', start: 17, span: 1, isMilestone: true },
+  ];
+
+  // 季度末列索引（每季度第3个月：索引2,5,8,11,14,17）
+  const quarterEndCols = new Set([2,5,8,11,14,17]);
+
+  const tbody = document.getElementById('gantt-body');
+
+  rows.forEach((row, rowIdx) => {
+    const tr = document.createElement('tr');
+
+    if (row.isPhase) {
+      tr.className = 'phase-row';
+      const td = document.createElement('td');
+      td.colSpan = 2 + totalMonths;
+      td.textContent = row.phase;
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return;
+    }
+
+    // 任务名列
+    const tdName = document.createElement('td');
+    let cls = 'col-task task-name ';
+    if (row.isDeliv) cls += 'deliv';
+    else if (row.isMilestone) cls += 'milestone';
+    else if (row.deeper) cls += 'deeper';
+    else cls += 'sub';
+    tdName.className = cls;
+
+    let prefix = '';
+    if (row.isDeliv) prefix = '◆ ';
+    else if (row.isMilestone) prefix = '◆ ';
+    else if (row.deeper) prefix = '— ';
+    tdName.textContent = prefix + row.name;
+    tr.appendChild(tdName);
+
+    // 责任方列
+    const tdOwner = document.createElement('td');
+    tdOwner.className = 'col-owner';
+    tdOwner.textContent = row.owner;
+    tr.appendChild(tdOwner);
+
+    // 月份单元格
+    for (let i = 0; i < totalMonths; i++) {
+      const td = document.createElement('td');
+      let cellCls = 'col-month bar-cell';
+      if ((Math.floor(i/3)) % 2 === 1) cellCls += ' alt';
+      if (quarterEndCols.has(i)) cellCls += ' q-border';
+      td.className = cellCls;
+
+      if (i === row.start) {
+        const bar = document.createElement('div');
+        if (row.isMilestone) {
+          bar.className = 'bar milestone';
+          bar.style.left = Math.round((monthCellWidth - 20)/2) + 'px';
+          bar.title = row.name;
+          bar.style.width = '20px';
+        } else if (row.isDeliv) {
+          bar.className = 'bar deliv';
+          bar.style.left = '4px';
+          bar.style.width = (row.span * monthCellWidth - 8) + 'px';
+          bar.title = row.name;
+        } else {
+          bar.className = 'bar ' + row.phase;
+          bar.style.left = '4px';
+          bar.style.width = (row.span * monthCellWidth - 8) + 'px';
+          bar.title = row.name + (row.label ? ' · ' + row.label : '') + '（' + row.span + '个月）';
+
+          // 标签处理：条形内文字，bar足够宽则内嵌，否则在bar右侧外显示
+          if (row.label) {
+            const barPx = row.span * monthCellWidth - 8;
+            const labelChars = row.label.length;
+            const minBarForInline = labelChars * 13 + 16; // 估算最小内嵌宽度
+            if (barPx >= minBarForInline) {
+              // 内嵌显示
+              bar.textContent = row.label;
+            } else {
+              // 外部浮出显示（bar右侧）
+              bar.textContent = '';
+              // 用一个外部label在bar右侧
+              const extLabel = document.createElement('div');
+              extLabel.className = 'bar-label';
+              extLabel.style.left = (4 + barPx + 4) + 'px';
+              extLabel.style.color = row.phase === 'p1' ? '#1d4ed8' :
+                                     row.phase === 'p2' ? '#047857' : '#b45309';
+              extLabel.textContent = row.label;
+              td.appendChild(extLabel);
+            }
+          }
+        }
+        td.appendChild(bar);
+      }
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  });
+})();
+</script>
+</body>
+</html>
